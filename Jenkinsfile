@@ -15,14 +15,14 @@ pipeline {
         stage('Building image') {
 		    steps{
 		      script {
-		        docker.build  "testjks:$BUILD_NUMBER"
+		        newImage = docker.build("testjks:$BUILD_NUMBER")
 		      }
 		    }
 		}
 		stage('push image') {
 		    steps{
 		      script {
-                dockerImage.push()
+               newImage.push()
 		      }
 		    }
 		}
