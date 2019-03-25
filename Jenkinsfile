@@ -22,7 +22,8 @@ pipeline {
 		stage('push image') {
 		    steps{
 		      script {
-               newImage.push()
+                newImage.push("${env.BUILD_NUMBER}")
+            	newImage.push("latest")
 		      }
 		    }
 		}
