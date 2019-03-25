@@ -1,4 +1,4 @@
-FROM openjdk
+FROM openjdk:8-jre-slim
 MAINTAINER howard
 COPY testjks.jar testjks.jar
 EXPOSE 8080
