@@ -2,7 +2,7 @@ pipeline {
     agent { 
     docker  { 
 	    	image 'maven:3.6.0-jdk-8' 
-	    	args '-v /root/.m2:/root/.m2 -v /usr/bin/docker:/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock --env JOBBASENAME=JJJ' 
+	    	args '-v /root/.m2:/root/.m2 -v /usr/bin/docker:/usr/bin/docker -v /var/run/docker.sock:/var/run/docker.sock --env JOBBASENAME=$JOB_BASE_NAME' 
 	    } 
     }
     stages {  
