@@ -3,4 +3,4 @@ MAINTAINER howard
 ENV JOB_BASE_NAME testjks
 COPY target/$JOB_BASE_NAME.jar $JOB_BASE_NAME.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/$JOB_BASE_NAME.jar"]
+ENTRYPOINT ["java","-jar","/"+$JOB_BASE_NAME+".jar"]
