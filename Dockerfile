@@ -1,6 +1,6 @@
 FROM openjdk:8-jre-slim
 MAINTAINER howard
-ENV JOBBASENAME $JOBBASENAME
-COPY target/$JOBBASENAME.jar $JOBBASENAME.jar
+ENV JOB_BASE_NAME testjks
+COPY target/$JOB_BASE_NAME.jar $JOB_BASE_NAME.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/$JOBBASENAME.jar"]
+ENTRYPOINT ["java","-jar","/$JOB_BASE_NAME.jar"]
