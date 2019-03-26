@@ -1,6 +1,5 @@
 FROM openjdk:8-jre-slim
-RUN echo $JOB_BASE_NAME
 MAINTAINER howard
-COPY target/testjks.jar testjks.jar
+COPY target/$JOB_BASE_NAME.jar $JOB_BASE_NAME.jar
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/testjks.jar"]
