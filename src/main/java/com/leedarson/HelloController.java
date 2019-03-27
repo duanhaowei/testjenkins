@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 @RestController
 public class HelloController {
 
-	private static final String template = "Hello_leedarson, %s!";
+	private static final String template = "Hello_leedarson_123123123, %s!";
 	private final AtomicLong counter = new AtomicLong();
 
 	@RequestMapping("/hello")
