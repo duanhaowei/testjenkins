@@ -12,7 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 @RestController
 public class HelloController {
 
-	private static final String template = "Hello_leedarson, %s!";
+	private static final String template = "Hello_leedarson,yonglin bro, %s!";
 	private final AtomicLong counter = new AtomicLong();
 
 	@Value("${custom.word}")
