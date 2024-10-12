@@ -1,0 +1,55 @@
+labels:
+app: message
+k8s-app: message
+pod-template-hash: 6c57d747f8
+security.istio.io/tlsMode: istio
+service.istio.io/canonical-name: message
+service.istio.io/canonical-revision: v1
+version: v1
+name: message-6c57d747f8-2p9cg
+namespace: ht
+ownerReferences:
+- apiVersion: apps/v1
+blockOwnerDeletion: true
+controller: true
+kind: ReplicaSet
+name: message-6c57d747f8
+uid: 75d97a3d-2039-413a-9f44-c2414233c899
+resourceVersion: '309399644'
+uid: 8057d577-bf24-416f-a37e-29007dfeb6a9
+spec:
+containers:
+imagePullPolicy: Always
+livenessProbe:
+failureThreshold: 3
+httpGet:
+path: /app-health/message/livez
+port: 15020
+scheme: HTTP
+initialDelaySeconds: 20
+periodSeconds: 5
+successThreshold: 1
+timeoutSeconds: 2
+name: message
+ports:
+- containerPort: 80
+protocol: TCP
+readinessProbe:
+failureThreshold: 3
+httpGet:
+path: /app-health/message/readyz
+port: 15020
+scheme: HTTP
+initialDelaySeconds: 50
+periodSeconds: 5
+successThreshold: 1
+timeoutSeconds: 2
+resources:
+limits:
+cpu: 500m
+memory: 1000Mi
+requests:
+cpu: 30m
+memory: 200Mi
+startupProbe:
+failureThreshold: 60
