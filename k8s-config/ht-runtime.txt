@@ -1,0 +1,98 @@
+name: runtime-pro-b7cd5bf88-ljqtt
+namespace: ht
+ownerReferences:
+- apiVersion: apps/v1
+blockOwnerDeletion: true
+controller: true
+kind: ReplicaSet
+name: runtime-pro-b7cd5bf88
+uid: 868a1060-525a-414a-921d-1c52823498d2
+resourceVersion: '302663483'
+uid: 67aa12ad-9eec-422e-b31e-1f7011e82944
+spec:
+containers:
+- env:
+image: dockerhub.leedarson.com/ht/runtime:0.0.7swpro
+imagePullPolicy: Always
+livenessProbe:
+failureThreshold: 3
+httpGet:
+path: /app-health/runtime/livez
+port: 15020
+scheme: HTTP
+initialDelaySeconds: 20
+periodSeconds: 5
+successThreshold: 1
+timeoutSeconds: 2
+name: runtime
+ports:
+- containerPort: 80
+name: tcp-80
+protocol: TCP
+- containerPort: 8000
+name: tcp-8000
+protocol: TCP
+readinessProbe:
+failureThreshold: 3
+httpGet:
+path: /app-health/runtime/readyz
+port: 15020
+scheme: HTTP
+initialDelaySeconds: 50
+periodSeconds: 5
+successThreshold: 1
+timeoutSeconds: 2
+resources:
+limits:
+cpu: '1'
+memory: 2000Mi
+requests:
+cpu: 60m
+memory: 600Mi
+startupProbe:
+failureThreshold: 60
+httpGet:
+path: /app-health/runtime/startupz
+port: 15020
+scheme: HTTP
+periodSeconds: 3
+successThreshold: 1
+timeoutSeconds: 1
+terminationMessagePath: /dev/termination-log
+terminationMessagePolicy: File
+volumeMounts:
+- mountPath: /var/ht/log
+name: app-logs
+- mountPath: /skywalking
+name: skywalking-agent
+- mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+name: kube-api-access-lff6p
+readOnly: true
+- args:
+- '-c'
+- /etc/filebeat.yml
+env:
+- name: K8S_NODE_NAME
+valueFrom:
+fieldRef:
+apiVersion: v1
+fieldPath: spec.nodeName
+- name: K8S_POD_NAMESPACE
+valueFrom:
+fieldRef:
+apiVersion: v1
+fieldPath: metadata.namespace
+image: elastic/filebeat:7.4.0
+imagePullPolicy: IfNotPresent
+name: filebeat
+resources: {}
+terminationMessagePath: /dev/termination-log
+terminationMessagePolicy: File
+volumeMounts:
+- mountPath: /var/ht/log
+name: app-logs
+- mountPath: /etc/filebeat.yml
+name: filebeat-config
+subPath: filebeat.yml
+- mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+name: kube-api-access-lff6p
