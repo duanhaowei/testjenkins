@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+annotations:
+kubectl.kubernetes.io/default-container: nginx
+kubectl.kubernetes.io/default-logs-container: nginx
+labels:
+app: htnginx-htphone
+pod-template-hash: 5f99597b76
+security.istio.io/tlsMode: istio
+service.istio.io/canonical-name: htnginx-htphone
+service.istio.io/canonical-revision: v100 
+- containerID: >-
+containerd://61322b1c7e4339892845b5ec04697628731b3122beb0cf9c4519e13680272a3e
+image: dockerhub.leedarson.com/ht/htnginx-htphone:1.1.26
+imageID: >-
+dockerhub.leedarson.com/ht/htnginx-htphone@sha256:6143a4341eb9bb710b11f1691ce7ab7c6368f18c9d8019a1882c90080fd9162a
