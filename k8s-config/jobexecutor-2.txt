@@ -1,0 +1,59 @@
+metadata:
+annotations:
+generateName: jobexecutor-5c7d56575c-
+labels:
+pod-template-hash: 5c7d56575c
+workload.user.cattle.io/workloadselector: apps.deployment-esb-jobexecutor
+name: jobexecutor-5c7d56575c-fcnp9
+namespace: esb
+ownerReferences: 
+- apiVersion: apps/v1
+blockOwnerDeletion: true
+controller: true
+kind: ReplicaSet
+name: jobexecutor-5c7d56575c
+uid: 2ef24958-6943-4337-acc0-ffe2d78e14bc
+resourceVersion: '342038302'
+uid: 89bfd3f2-be99-4463-9c13-e397520ad349
+spec:
+containers:
+- env:
+- name: JAVA_OPTS
+value: >-
+-Xmx800m -javaagent:/skywalking/agent/skywalking-agent.jar
+-Dskywalking.agent.service_name=esb::ldx-esb-job-executor
+-Dskywalking.collector.backend_service=172.20.2.32:11800
+imagePullPolicy: Always
+livenessProbe:
+failureThreshold: 3
+httpGet:
+path: /actuator/health
+port: 10020
+scheme: HTTP
+periodSeconds: 5
+successThreshold: 1
+timeoutSeconds: 2
+name: container-0
+ports:
+- containerPort: 80
+name: tcp-80
+protocol: TCP
+- containerPort: 8000
+name: tcp-8000
+protocol: TCP
+readinessProbe:
+failureThreshold: 3
+httpGet:
+path: /actuator/health
+port: 10020
+scheme: HTTP
+periodSeconds: 10
+successThreshold: 1
+timeoutSeconds: 1
+resources:
+limits:
+cpu: '2'
+memory: 1Gi
+requests:
+cpu: 50m
+memory: 256Mi
