@@ -30,7 +30,7 @@ httpGet:
 path: /actuator/health
 port: 10020
 scheme: HTTP
-periodSeconds: 5
+periodSeconds: 15
 successThreshold: 1
 timeoutSeconds: 2
 name: container-0
@@ -42,17 +42,17 @@ protocol: TCP
 name: tcp-8000
 protocol: TCP
 readinessProbe:
-failureThreshold: 3
+failureThreshold: 13
 httpGet:
 path: /actuator/health
 port: 10020
 scheme: HTTP
 periodSeconds: 10
-successThreshold: 1
-timeoutSeconds: 1
+successThreshold: 10
+timeoutSeconds: 10
 resources:
 limits:
-cpu: '2'
+cpu: '4'
 memory: 1Gi
 requests:
 cpu: 50m
