@@ -1,0 +1,373 @@
+apiVersion: v1
+kind: Pod
+metadata:
+annotations:
+kubectl.kubernetes.io/default-container: nginx
+kubectl.kubernetes.io/default-logs-container: nginx
+prometheus.io/path: /stats/prometheus
+prometheus.io/port: '15020'
+prometheus.io/scrape: 'true'
+sidecar.istio.io/status: >-
+{"initContainers":["istio-init"],"containers":["istio-proxy"],"volumes":["workload-socket","credential-socket","workload-certs","istio-envoy","istio-data","istio-podinfo","istio-token","istiod-ca-cert"],"imagePullSecrets":null,"revision":"default"}
+generateName: htnginx-oms-85cd858485-
+labels:
+app: htnginx-oms 
+pod-template-hash: 85cd858485
+security.istio.io/tlsMode: istio
+service.istio.io/canonical-name: htnginx-oms
+service.istio.io/canonical-revision: latest
+managedFields:
+-
+k:{"containerPort":80,"protocol":"TCP"}:
+.: {}
+f:containerPort: {}
+f:name: {}
+f:protocol: {}
+f:resources: {}
+f:terminationMessagePath: {}
+f:terminationMessagePolicy: {}
+f:dnsPolicy: {}
+f:enableServiceLinks: {}
+f:imagePullSecrets:
+.: {}
+k:{"name":"harborsec"}: {}
+f:restartPolicy: {}
+f:schedulerName: {}
+f:securityContext: {}
+f:terminationGracePeriodSeconds: {}
+manager: kube-controller-manager
+
+- apiVersion: v1
+fieldsType: FieldsV1
+fieldsV1:
+f:status:
+f:conditions:
+k:{"type":"ContainersReady"}:
+.: {}
+f:lastProbeTime: {}
+f:lastTransitionTime: {}
+f:status: {}
+f:type: {}
+k:{"type":"Initialized"}:
+.: {}
+f:lastProbeTime: {}
+f:lastTransitionTime: {}
+f:status: {}
+f:type: {}
+k:{"type":"Ready"}:
+.: {}
+f:lastProbeTime: {}
+f:lastTransitionTime: {}
+f:status: {}
+f:type: {}
+f:containerStatuses: {}
+f:hostIP: {}
+f:initContainerStatuses: {}
+f:phase: {}
+f:podIP: {}
+f:podIPs:
+.: {}
+k:{"ip":"10.244.7.123"}:
+.: {}
+f:ip: {}
+f:startTime: {}
+manager: kubelet
+operation: Update
+subresource: status
+name: htnginx-oms-85cd858485-qrn7d
+namespace: ht
+ownerReferences:
+- apiVersion: apps/v1
+blockOwnerDeletion: true
+controller: true
+kind: ReplicaSet
+name: htnginx-oms-85cd858485
+uid: cd7322f1-5fe0-4b19-b0bb-dd3092cef1bd
+resourceVersion: '334884170'
+uid: c40c934a-5d10-4646-8bdb-602c5570fba3
+spec:
+containers:
+- image: >-
+harbor.leedarson.com/itcenter/ldx-oms-admin:prod.91a8dd6
+imagePullPolicy: IfNotPresent
+name: nginx
+ports:
+- containerPort: 80
+name: tcp-80
+protocol: TCP
+resources: {}
+terminationMessagePath: /dev/termination-log
+terminationMessagePolicy: File
+volumeMounts:
+- mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+name: kube-api-access-6pzsw
+readOnly: true
+- args:
+- proxy
+- sidecar
+- '--domain'
+- $(POD_NAMESPACE).svc.cluster.local
+- '--proxyLogLevel=warning'
+- '--proxyComponentLogLevel=misc:error'
+- '--log_output_level=default:info'
+- '--concurrency'
+- '2'
+env:
+- name: JWT_POLICY
+value: third-party-jwt
+- name: PILOT_CERT_PROVIDER
+value: istiod
+- name: CA_ADDR
+value: istiod.istio-system.svc:15012
+- name: POD_NAME
+valueFrom:
+fieldRef:
+apiVersion: v1
+fieldPath: metadata.name
+- name: POD_NAMESPACE
+valueFrom:
+fieldRef:
+apiVersion: v1
+fieldPath: metadata.namespace
+- name: INSTANCE_IP
+valueFrom:
+fieldRef:
+apiVersion: v1
+fieldPath: status.podIP
+- name: SERVICE_ACCOUNT
+valueFrom:
+fieldRef:
+apiVersion: v1
+fieldPath: spec.serviceAccountName
+- name: HOST_IP
+valueFrom:
+fieldRef:
+apiVersion: v1
+fieldPath: status.hostIP
+- name: PROXY_CONFIG
+value: |
+{}
+- name: ISTIO_META_POD_PORTS
+value: |-
+[
+{"name":"tcp-80","containerPort":80,"protocol":"TCP"}
+]
+- name: ISTIO_META_APP_CONTAINERS
+value: nginx
+- name: ISTIO_META_CLUSTER_ID
+value: Kubernetes
+- name: ISTIO_META_INTERCEPTION_MODE
+value: REDIRECT
+- name: ISTIO_META_WORKLOAD_NAME
+value: htnginx-oms
+- name: ISTIO_META_OWNER
+value: kubernetes://apis/apps/v1/namespaces/ht/deployments/htnginx-oms
+- name: ISTIO_META_MESH_ID
+value: cluster.local
+- name: TRUST_DOMAIN
+value: cluster.local
+image: docker.io/istio/proxyv2:1.16.0
+imagePullPolicy: IfNotPresent
+name: istio-proxy
+ports:
+- containerPort: 15090
+name: http-envoy-prom
+protocol: TCP
+readinessProbe:
+failureThreshold: 30
+httpGet:
+path: /healthz/ready
+port: 15021
+scheme: HTTP
+initialDelaySeconds: 1
+periodSeconds: 2
+successThreshold: 1
+timeoutSeconds: 3
+resources:
+limits:
+cpu: '2'
+memory: 1Gi
+requests:
+cpu: 100m
+memory: 128Mi
+securityContext:
+allowPrivilegeEscalation: false
+capabilities:
+drop:
+- ALL
+privileged: false
+readOnlyRootFilesystem: true
+runAsGroup: 1337
+runAsNonRoot: true
+runAsUser: 1337
+terminationMessagePath: /dev/termination-log
+terminationMessagePolicy: File
+volumeMounts:
+- mountPath: /var/run/secrets/workload-spiffe-uds
+name: workload-socket
+- mountPath: /var/run/secrets/credential-uds
+name: credential-socket
+- mountPath: /var/run/secrets/workload-spiffe-credentials
+name: workload-certs
+- mountPath: /var/run/secrets/istio
+name: istiod-ca-cert
+- mountPath: /var/lib/istio/data
+name: istio-data
+- mountPath: /etc/istio/proxy
+name: istio-envoy
+- mountPath: /var/run/secrets/tokens
+name: istio-token
+- mountPath: /etc/istio/pod
+name: istio-podinfo
+- mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+name: kube-api-access-6pzsw
+readOnly: true
+dnsPolicy: ClusterFirst
+enableServiceLinks: true
+imagePullSecrets:
+- name: harborsec
+initContainers:
+- args:
+- istio-iptables
+- '-p'
+- '15001'
+- '-z'
+- '15006'
+- '-u'
+- '1337'
+- '-m'
+- REDIRECT
+- '-i'
+- ''
+- '-x'
+- ''
+- '-b'
+- ''
+- '-d'
+- 15090,15021,15020
+- '--log_output_level=default:info'
+image: docker.io/istio/proxyv2:1.16.0
+imagePullPolicy: IfNotPresent
+name: istio-init
+resources:
+limits:
+cpu: '2'
+memory: 1Gi
+requests:
+cpu: 100m
+memory: 128Mi
+securityContext:
+allowPrivilegeEscalation: false
+capabilities:
+add:
+- NET_ADMIN
+- NET_RAW
+drop:
+- ALL
+privileged: false
+readOnlyRootFilesystem: false
+runAsGroup: 0
+runAsNonRoot: false
+runAsUser: 0
+terminationMessagePath: /dev/termination-log
+terminationMessagePolicy: File
+volumeMounts:
+- mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+name: kube-api-access-6pzsw
+readOnly: true
+nodeName: node08
+preemptionPolicy: PreemptLowerPriority
+priority: 0
+restartPolicy: Always
+schedulerName: default-scheduler
+securityContext: {}
+serviceAccount: default
+serviceAccountName: default
+terminationGracePeriodSeconds: 30
+tolerations:
+- effect: NoExecute
+key: node.kubernetes.io/not-ready
+operator: Exists
+tolerationSeconds: 300
+- effect: NoExecute
+key: node.kubernetes.io/unreachable
+operator: Exists
+tolerationSeconds: 300
+volumes:
+- emptyDir: {}
+name: workload-socket
+- emptyDir: {}
+name: credential-socket
+- emptyDir: {}
+name: workload-certs
+- emptyDir:
+medium: Memory
+name: istio-envoy
+- emptyDir: {}
+name: istio-data
+- downwardAPI:
+defaultMode: 420
+items:
+- fieldRef:
+apiVersion: v1
+fieldPath: metadata.labels
+path: labels
+- fieldRef:
+apiVersion: v1
+fieldPath: metadata.annotations
+path: annotations
+name: istio-podinfo
+- name: istio-token
+projected:
+defaultMode: 420
+sources:
+- serviceAccountToken:
+audience: istio-ca
+expirationSeconds: 43200
+path: istio-token
+- configMap:
+defaultMode: 420
+name: istio-ca-root-cert
+name: istiod-ca-cert
+- name: kube-api-access-6pzsw
+projected:
+defaultMode: 420
+sources:
+- serviceAccountToken:
+expirationSeconds: 3607
+path: token
+- configMap:
+items:
+- key: ca.crt
+path: ca.crt
+name: kube-root-ca.crt
+- downwardAPI:
+items:
+- fieldRef:
+apiVersion: v1
+fieldPath: metadata.namespace
+path: namespace
+status:
+
+status: 'True'
+type: ContainersReady
+- lastProbeTime: null
+status: 'True'
+type: PodScheduled
+containerStatuses:
+- containerID: >-
+containerd://0c0668efe4553608656c148031212333c9624db9ce4291f597c44a84445eb8b5
+image: docker.io/istio/proxyv2:1.16.0
+imageID: >-
+docker.io/istio/proxyv2@sha256:f6f97fa4fb77a3cbe1e3eca0fa46bd462ad6b284c129cf57bf91575c4fb50cf9
+- containerID: >-
+containerd://645d0cdbbb35d92a51bd078e77fcec5d4f404dcc1cfb6a22607c78ffb7671cc6
+imageID: >-
+harbor.leedarson.com/itcenter/ldx-oms-admin@sha256:6cfc48ade23e02c75cd67c90c98eb5c0aa16f106f23014d1b967843dfca7f455
+lastState: {}
+name: nginx
+ready: true
+restartCount: 0
+started: true
+state:
+running:
