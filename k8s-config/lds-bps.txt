@@ -1,0 +1,54 @@
+metadata:
+annotations:
+kubectl.kubernetes.io/default-container: ldx-bps
+kubectl.kubernetes.io/default-logs-container: ldx-bps
+prometheus.io/path: /stats/prometheus
+prometheus.io/port: '15020'
+prometheus.io/scrape: 'true'
+labels:
+app: ldx-bps
+pod-template-hash: 5d677ff485
+security.istio.io/tlsMode: istio
+service.istio.io/canonical-name: ldx-bps
+service.istio.io/canonical-revision: latest
+namespace: ht 
+ownerReferences:
+- apiVersion: apps/v1
+blockOwnerDeletion: true
+controller: true
+kind: ReplicaSet
+name: ldx-bps-5d677ff485
+uid: bec6d66e-41d3-49d4-ad59-3a1b3f3779ab
+resourceVersion: '336023093'
+uid: be5ebb0f-e0ba-4856-a4dd-b4639c8e5581
+spec:
+containers:
+- env:
+- name: NACOS_ADDR
+value:  
+- name: NACOS_GROUP
+value:  
+- name: NACOS_USERNAME
+value:  
+- name: NACOS_PASSWORD
+value:  
+- name: PROFILE
+value: prod
+- name: JAVA_OPTS
+value: >-
+-Xmx1g -XX:+UseG1GC
+-javaagent:/skywalking/agent/skywalking-agent.jar
+-Dskywalking.agent.service_name=ht::bps
+-Dskywalking.collector.backend_service=172.20.2.32:11800
+image: harbor.leedarson.com/itcenter/ldx-bps 
+imagePullPolicy: Always
+livenessProbe:
+failureThreshold: 5
+httpGet:
+path: /app-health/ldx-bps/livez
+port: 15020
+scheme: HTTP
+periodSeconds: 30
+successThreshold: 1
+timeoutSeconds: 60
+name: ldx-bps
