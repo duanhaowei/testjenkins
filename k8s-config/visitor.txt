@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+annotations:
+deployment.kubernetes.io/revision: '11'
+name: visitor
+namespace: asd 
+resourceVersion: '325120052'
+uid: 85e35757-ad02-4ef8-9b2f-d3e3d476d0fe
+spec:
+progressDeadlineSeconds: 600
+replicas: 1
+revisionHistoryLimit: 10
+selector:
+matchLabels:
+app: visitor
+strategy:
+rollingUpdate:
+maxSurge: 25%
+maxUnavailable: 25%
+type: RollingUpdate
+template:
+metadata:
+creationTimestamp: null
+labels:
+app: visitor
+version: v1
+spec:
+containers:
+- env:
+- name: LOGLEVEL
+value: debug
+- name: REDIS_HOST
+value: SRVLCPDis02.LEEDARSON.LOCAL
+- name: REDIS_DATABASE
+value: '13'
+- name: REDIS_PORT
+value: '6379'
+image: harbor.dev.leedarson.com/hr/visitor:v0.0.13
+imagePullPolicy: Always
+name: visitor
+ports:
+- containerPort: 80
+protocol: TCP
+resources:
+limits:
+cpu: 500m
+memory: 1000Mi
+requests:
+cpu: 10m
+memory: 200Mi
+terminationMessagePath: /dev/termination-log
+terminationMessagePolicy: File
+dnsPolicy: ClusterFirst
+restartPolicy: Always
+schedulerName: default-scheduler
+securityContext: {}
+terminationGracePeriodSeconds: 30
